@@ -137,6 +137,7 @@ def evaluate_one_epoch():
         for iou_thresh in AP_IOU_THRESHOLDS]
     net.eval() # set model to eval mode (for bn and dp)
     for batch_idx, batch_data_label in enumerate(TEST_DATALOADER):
+        print("BATCH IDX: ", batch_idx)
         if batch_idx % 10 == 0:
             print('Eval batch: %d'%(batch_idx))
         for key in batch_data_label:

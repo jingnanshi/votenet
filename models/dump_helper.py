@@ -102,6 +102,7 @@ def dump_results(end_points, dump_dir, config, inference_switch=False, idx_beg=0
     objectness_mask = end_points['objectness_mask'].detach().cpu().numpy() # (B,K,)
 
     for i in range(batch_size):
+        print("Current dump idx:",idx_beg+i)
         if np.sum(objectness_label[i,:])>0:
             pc_util.write_ply(pred_center[i,objectness_label[i,:]>0,0:3], os.path.join(dump_dir, '%06d_gt_positive_proposal_pc.ply'%(idx_beg+i)))
         if np.sum(objectness_mask[i,:])>0:
@@ -123,7 +124,7 @@ def dump_results(end_points, dump_dir, config, inference_switch=False, idx_beg=0
     # OPTIONALL, also dump prediction and gt details
     if 'batch_pred_map_cls' in end_points:
         for ii in range(batch_size):
-            fout = open(os.path.join(dump_dir, '%06d_pred_map_cls.txt'%(ii)), 'w')
+            fout = open(os.path.join(dump_dir, '%06d_pred_map_cls.txt'%(idx_beg+ii)), 'w')
             for t in end_points['batch_pred_map_cls'][ii]:
                 fout.write(str(t[0])+' ')
                 fout.write(",".join([str(x) for x in list(t[1].flatten())]))
@@ -132,7 +133,7 @@ def dump_results(end_points, dump_dir, config, inference_switch=False, idx_beg=0
             fout.close()
     if 'batch_gt_map_cls' in end_points:
         for ii in range(batch_size):
-            fout = open(os.path.join(dump_dir, '%06d_gt_map_cls.txt'%(ii)), 'w')
+            fout = open(os.path.join(dump_dir, '%06d_gt_map_cls.txt'%(idx_beg+ii)), 'w')
             for t in end_points['batch_gt_map_cls'][ii]:
                 fout.write(str(t[0])+' ')
                 fout.write(",".join([str(x) for x in list(t[1].flatten())]))
